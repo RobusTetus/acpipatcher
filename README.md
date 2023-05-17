@@ -8,3 +8,5 @@ My laptop has some trouble with Linux. So I tracked the issue to be tied with my
 It may sound a bit overkill... and it may just be. But I already started this, so even if it won't work in the end I can at least keep the expirience gained. :)
 
 *You are free to use my code and ideas behind it, any way you like, but please respect the license attached.*
+
+Big thank you to all who contributed to https://github.com/LongSoft/UEFITool, I would be lost without these great tools. :)
