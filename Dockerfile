@@ -1,7 +1,13 @@
 FROM fedora
 RUN mkdir acpipatcher
 WORKDIR acpipatcher
-RUN dnf install -y acpica-tools hexdump 7z unzip
-VOLUME tables 
+RUN dnf install -y \
+acpica-tools \
+p7zip \
+unzip \
+wget \
+util-linux \
+p7zip-plugins
 COPY . .
-CMD ["./script.sh"]
+RUN dnf clean all
+ENTRYPOINT [ "./script.sh" ]

@@ -1,0 +1,9 @@
+version: 3.7
+services:
+  script:
+    container_name: ACPIpatcher
+    image: "robustetus/acpipatcher:${TAG}"
+    volumes:
+      - "./tables:/acpipatcher/tables:z"
+      - "./tables/dups:/acpipatcher/tables/dups:z"
+      - "${BIOSFILE}:/acpipatcher/bios.exe:z"

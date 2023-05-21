@@ -7,6 +7,8 @@ SSDT="SSDT"
 bios_folder="dump"
 workdir=$(pwd)
 
+source .env
+
 get_UEFIExtract() {
 	echo "Starting download of UEFIExtract..."
 	wget -q $(curl -s https://api.github.com/repos/LongSoft/UEFITool/releases/latest | grep browser_download_url | grep linux | grep Extract | head -n 1 | cut -d '"' -f 4)
@@ -47,14 +49,15 @@ decompile(){
 }
 
 remove_duplicates() {
-	mkdir dups
+	dups="dups"
+	mkdir -p $dups
 	for i in $(grep -l $1 * | uniq); do
-		cp $i dups
-		iasl -d dups/$i
+		cp $i $dups
+		iasl -d $dups/$i
 		echo "Separated duplicates and decompiled them..."
 		hexdup=$(echo $1 | hexdump -v -e '/1 "%02X "' | sed 's/ //g')
 		escseq=$( echo "08 04 0A FF 0A FF 00 00" | sed 's/ //g' )
-		dup=$(hexdump -ve '1/1 "%.2x"' dups/$i | grep -i "${hexdup}.*${escseq}")
+		dup=$(hexdump -ve '1/1 "%.2x"' $dups/$i | grep -i "${hexdup}.*${escseq}")
 	done
 	return 0
 }
@@ -66,9 +69,10 @@ fi
 
 if [ -d "$extract_dir" ]; then
 	echo "Removing old tables..."
-	rm -rf $extract_dir
+	rm -rf $extract_dir/*
+else
+	mkdir -p $extract_dir
 fi
-mkdir $extract_dir
 
 echo "Extracting fresh tables..."
 get_tables $SSDT $extract_dir
