@@ -10,4 +10,3 @@ util-linux \
 p7zip-plugins
 COPY . .
 RUN dnf clean all
-ENTRYPOINT [ "./script.sh" ]

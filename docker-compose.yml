@@ -1,9 +1,12 @@
 version: 3.7
 services:
   script:
-    container_name: ACPIpatcher
-    image: "robustetus/acpipatcher:${TAG}"
+    container_name: acpipatcher
+    image: "localhost/robustetus/atpt:${TAG}"
+    entrypoint: $workdir/script.sh
+    command:
+      - ${workdir}/bios.exe
     volumes:
-      - "./tables:/acpipatcher/tables:z"
-      - "./tables/dups:/acpipatcher/tables/dups:z"
-      - "${BIOSFILE}:/acpipatcher/bios.exe:z"
+      - "./Raw_Tables:${extract_dir}:z"
+      - "./Duplicate_Tables:${duplicate_dir}:z"
+      - "${BIOSFILE}:${workdir}/bios.exe:z"

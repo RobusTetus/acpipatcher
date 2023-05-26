@@ -1,0 +1,11 @@
+FROM debian
+RUN mkdir acpipatcher
+WORKDIR acpipatcher
+RUN apt-get update && apt-get install -y \
+acpica-tools \
+p7zip \
+unzip \
+wget \
+util-linux
+COPY . .
+RUN apt-get clean all
