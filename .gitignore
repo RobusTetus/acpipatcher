@@ -1,4 +1,7 @@
 #We don't want git to watch bios files and the extracted tables.
 *.exe
 *.bin
+*.dsl
+*.aml
+*.asl
 .env
