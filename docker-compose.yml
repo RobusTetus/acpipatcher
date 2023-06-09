@@ -2,7 +2,7 @@ version: 3.7
 services:
   script:
     container_name: acpipatcher
-    image: "robustetus/acpipatcher:${TAG}"
+    image: "robustetus/acpipatcher:latest"
     entrypoint: /acpipatcher/script.sh
     command:
       - /acpipatcher/bios.exe
