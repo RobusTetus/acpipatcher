@@ -7,10 +7,10 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Create env file
-        run: cp .env.example .env
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Create env file
+        run: cp .env.example .env
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
