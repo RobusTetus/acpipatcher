@@ -7,10 +7,10 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-			- name: Create env file
+      - name: Create env file
         run: cp .env.example .env
       - name: Checkout
-      	uses: actions/checkout@v3
+        uses: actions/checkout@v3
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -23,6 +23,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-        	context: .
+          context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/acpipatcher:latest
