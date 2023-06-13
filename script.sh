@@ -2,13 +2,16 @@
 #TODO: Make variable names more logical and clear
 #TODO: Fragment the script more... putting functions of similar categories inside another script and source it here
 #TODO: get rid of using the IFS variable and the expand aliases
+EXTRACTDIR="/acpipatcher/raw_tables"
+DUPLICATEDIR="/acpipatcher/duplicate_tables"
+BIOSFOLDER="/acpipatcher/installer_dump"
+CONTENTFOLDER="/acpipatcher/bios_contents"
 IFS=$'\n'
 shopt -s expand_aliases
 
 extract_binary=./uefiextract # TODO: decide if this variable is really needed
 
 #TODO: Clean up the alias and source, maybe source aliases too ??
-source .env
 alias fstr='grep -oaPrl'
 
 cleanup() { #function to clean up folders of the old tables - we don't want to mix up tables from different sessions, even from different bioses

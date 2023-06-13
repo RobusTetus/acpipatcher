@@ -3,10 +3,12 @@ services:
   script:
     container_name: acpipatcher
     image: "robustetus/acpipatcher:latest"
-    entrypoint: /acpipatcher/script.sh
+    working_dir: /acpipatcher
+    build: .
+    entrypoint: ./script.sh
     command:
-      - /acpipatcher/bios.exe
+      - bios.exe
     volumes:
-      - "./Raw_Tables:${EXTRACTDIR}:z"
-      - "./Duplicate_Tables:${DUPLICATEDIR}:z"
+      - "./Raw_Tables:/acpipatcher/raw_tables:z"
+      - "./Duplicate_Tables:/acpipatcher/duplicate_tables:z"
       - "${BIOSFILE}:/acpipatcher/bios.exe:z"

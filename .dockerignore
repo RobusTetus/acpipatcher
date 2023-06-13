@@ -1,5 +1,7 @@
 .git
 .gitignore
+.github
+.env.example
 LICENSE
 README.md
 Raw_Tables/
