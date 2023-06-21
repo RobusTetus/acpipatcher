@@ -7,19 +7,20 @@ DUPLICATEDIR="/acpipatcher/duplicate_tables"
 BIOSFOLDER="/acpipatcher/installer_dump"
 CONTENTFOLDER="/acpipatcher/bios_contents"
 IFS=$'\n'
+
 shopt -s expand_aliases
+alias fstr='grep -oaPrl'
 
 extract_binary=./uefiextract # TODO: decide if this variable is really needed
 
-#TODO: Clean up the alias and source, maybe source aliases too ??
-alias fstr='grep -oaPrl'
 
-cleanup() { #function to clean up folders of the old tables - we don't want to mix up tables from different sessions, even from different bioses
+
+cleanup() {
 	rm -rf $EXTRACTDIR/*
 	rm -rf $DUPLICATEDIR/*
 }
 
-get_binary() { #simple function to grab latest release of UEFIExtract, unzip it and cleanup after itself
+get_binary() {
 	#TODO: Make more modular... e.g. user could choose version or use a fork of uefitool even ???
 	wget -q $(curl -s https://api.github.com/repos/LongSoft/UEFITool/releases/latest | grep browser_download_url | grep linux | grep Extract | head -n 1 | cut -d '"' -f 4)
 	echo "Unzipping and cleaning..."
@@ -31,7 +32,7 @@ get_binary() { #simple function to grab latest release of UEFIExtract, unzip it 
 get_tables() {
 	declare -i iter=1
 	for i in $(fstr $1 $CONTENTFOLDER); do
-		if hexdump -C -n 4 $i | grep -q $1; then
+		if xxd -l 4 $i | grep -q $1; then
 			cp $i $2/$1-$iter${i:(-4)}
 			iter+=1
 		fi
@@ -54,18 +55,14 @@ decompile(){
 
 remove_duplicates() {
 	echo "Removing duplicates for method $1"
-	#TODO: xxd would be better than hexdump here, would have to rewrite the script to use xxd instead
-	#hexdup=$(echo -n $1 | hexdump -ve '"%X"')
-	#escseq=$(echo -n 08040AFF0AFF0000)
-	
+	#value=$(echo -n $1 | xxd -p -u)
 	for i in $(fstr $1 $EXTRACTDIR); do
 		filename=$(basename $i)
 		cp $i $DUPLICATEDIR
 		iasl -d $DUPLICATEDIR/$filename
-		#dup=$(hexdump -ve '"%X"' $DUPLICATEDIR/$filename | grep -o $hexdup.*$escseq) This does not apply to all tables
+		#dup=$(xxd -p -u $DUPLICATEDIR/$filename | grep $value)
 		#echo "Duplicate method hex is $dup"
-		#TODO: find a way to detect the end of the duplicate method and replace it with zeros
-		#TODO: automatically replace the duplicate part with zeros, of course we have to determine one file that we keep as is (maybe??)
+		#TODO: find a way to detect the end of the duplicate method and replace it with zeros, keep one in the set as is
 	done
 	echo "This script only detects and decompiles duplicates for now. Stay tuned for automatic removal and decompilation."
 }
@@ -91,7 +88,7 @@ if [ -e "$CONTENTFOLDER" ]; then
 	rm -rf $CONTENTFOLDER
 fi
 
-ln -s $(find . -name '*.dump') $CONTENTFOLDER #TODO: Works fine... but I am not happy with it... maybe changing the folder structure a bit would help
+ln -s $(find . -name '*.dump') $CONTENTFOLDER #TODO: change the folder structure a bit
 	
 echo "Extracting fresh tables..."
 get_tables "SSDT" $EXTRACTDIR

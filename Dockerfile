@@ -7,6 +7,6 @@ p7zip-full \
 unzip \
 wget \
 curl \
-bsdextrautils
+xxd
 COPY . .
 RUN apt-get clean all
